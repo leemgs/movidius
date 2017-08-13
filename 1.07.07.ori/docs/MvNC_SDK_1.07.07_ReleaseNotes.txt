@@ -1,0 +1,95 @@
+﻿============================================================
+Movidius Neural Compute SDK Release Notes
+V1.07.07 – 2017-07-26
+============================================================
+
+SDK Notes:
+	 
+	1. 	SDK includes Toolkit 	V1.07.06.  Toolkit unmodified.
+	2.	SDK includes API 	V1.07.07.  Added support for RaspberryPi* 3 Model B.  API now includes redistributables for _armhf architecture and python 3.4. 
+
+API Notes:
+
+	1.	Install toolkit and API on x86-64, then copy redistributables and tested graph files over to the target platform and use.  See API documenetation for details.
+	2.	redist subirectory includes a "pi_jessie" subdirectory containing redistributables for RaspberryPi* 3 Model B running Raspian Jessie July 2017 release.
+	3.	For this release, use the python3-mvnc*.deb in the pi_jessie subdirectory for this platform, as it installs to a location usable for python3.4.
+	4.	Only USB cameras have been tested with the examples for this release.
+	5.	Some python examples require CV2.  OpenCV with python3 bindings must be installed for these examples to function.  Examples were tested on Jessie with OpenCV-3.0.0.
+	6.	ncs_camera.py: 	 use --opengl command line argument with ncs_camera.py for operation on Raspberry* Pi.
+	7.	stream_infer.py: uncomment SINK_NAME="glimagesink" and comment SINK_NAME="xvimagesink" for operation on Raspberry* Pi.
+
+============================================================
+Movidius Neural Compute SDK Release Notes
+V1.07.06 – 2017-07-18
+============================================================
+
+SDK Installation
+	1.	API and Toolkit archives need to be unpacked into adjacent directories for the API setup.sh script to succeed.  After unpacking, Toolkit should exist in <sdk>/bin, API in <sdk>/ncapi.
+	
+	2.	Before installation, please make sure your system has internet access and that apt-get, wget, and git function thru any proxies present.  Please make sure your system is updated using
+		$ sudo apt-get update 
+		$ sudo apt-get upgrade
+		
+	3.	During Toolkit installation, when prompted "Enter installation location (default: /opt/movidius, press enter for default location):" this refers to the location where a compatible Caffe will be installed.  Accept the default location.
+	
+	4.	After Toolkit installation, before using the toolkit or installing the API, please refresh your environment using the following command.  
+		$ source ~/.bashrc
+		
+Ensure $PYTHONPATH exists before continuing with API installation.
+
+SDK Notes:
+	1.	For this release, for SqueezeNet, use provided .prototxt file which has been adjusted to function with the NC_Toolkit compiler.  SqueezeNet includes a convolution layer with kernel size = 1x1 and pad=1 (conv10). Adding padding to a 1x1 convolution doesn’t make any sense as this won’t have any effect on the network except increasing the output size and may have even negative impact on the classification in certain situations. NC_Toolkit only supports SAME and VALID padding types and this case is none of them.
+	
+	2.	Headline Features for this release
+		-Supports Caffe input
+		-Convolutions
+		-NxN Convolution with Stride S.
+		-The following cases have been extensively tested:
+		-1x1s1,3x3s1,5x5s1,7x7s1, 7x7s2, 7x7s4
+		-Group convolution
+		-Depth Convolution kernel sizes 3x3, 5x5, 7x7, 9x9, strides 1, 2, 3, 4, 8		
+		-Max Pooling Radix NxM with Stride S
+		-Average Pooling Radix NxM with Stride S
+		-Local Response Normalization
+		-Relu, Relu-X, Prelu
+		-Softmax
+		-Sigmoid
+		-Tanh
+		-Deconvolution
+		-Slice
+		-Scale
+		-ElmWise unit
+		-Fully Connected Layers
+		-Element wise operations : sum, prod, max
+		-Elu
+		-Reshape
+		-Flatten
+		-Power
+		-Crop
+
+	3.	Tested Networks; This release has been tested on many Caffe prototxts including the following:
+		-GoogleNet V1
+		-SqueezeNet V1.1
+		-LeNet
+		-CaffeNet
+		-VGG (Sousmith VGG_A)
+
+API Notes:
+	1.	The API installation depends on the Toolkit to be installed and working properly.
+	
+	2.	Unlike the other network subdirectories, the Age network directory in the Neural Compute API does not include categories.txt, stat.txt or inputsize.txt.  These files are not needed for the age_gender.py example to function.
+	
+	3.	For this release, stream_infer.py example may return NaN as a result on launch.  If this is seen please run ncs_camera.py example, exit, then re-run stream_infer.py.
+	
+	4.	To deploy applications on a target platform, such as an embedded platform, Copy and install the .deb packages found in <sdk>/ncapi/redist.  These packages allow your application to access the Neural Compute Stick.
+	
+	5.	For this version of API, a KeyError exception may be thrown for a normal condition after a GetResult call.  Refer to stream_infer.py’s GetResult call for an example of proper exception handling for this issue.  ncs_camera.py lacks this exception handling and as a result a repeating error message may be printed to the console.
+	
+	6.	Calling ncs_camera.py sequentially doesn’t always succeed, if encountered relaunch.
+	
+	7.	For this release, ncs_camera.py may print errors on exit.
+
+
+============================================================
+END
+============================================================
