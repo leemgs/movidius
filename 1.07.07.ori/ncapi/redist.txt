@@ -1,0 +1,6 @@
+Movidius Neural Compute API Redistributable Notice
+
+The .deb packages contained in the redist subdirectory are Redistributables, as defined in LICENSE.
+
+end
+ 
